@@ -18,4 +18,11 @@ def withdraw(balance,lock):
 
 if __name__ == '__main__':
     balance = multiprocessing.Value('i',2000)
-    pass
+    lock = multiprocessing.Lock()
+    d = multiprocessing.Process(target=deposit,args=(balance,lock))
+    w = multiprocessing.Process(target=withdraw,args = (balance,lock))
+    d.start()
+    w.start()
+    d.join()
+    w.join()
+    print('outstanding balance is ',balance.value)
